@@ -15,25 +15,37 @@ namespace Jalasoft.DevLEvel1.Practice04
 
         public void Deposit(int amount)
         {
-            var total=accountBalance += amount;
-            Operations.Add(new Operation(){InitialBalance=accountBalance,EndBalance= total,Amount=amount,TransactionType= OperationType.Deposit });
+            if (amount % 10 != 0) 
+            {
+                throw new NotMultipleOfTenException();
+            }
+            accountBalance += amount;
+            Operations.Add(new Operation(){InitialBalance=accountBalance,EndBalance= accountBalance, Amount=amount,TransactionType= OperationType.Deposit });
 
         }
         public void ShowBalance() => Console.WriteLine("The account balance is:{0}", accountBalance);
 
         public void ShowOperation(double mount)
         {
-            var query = Operations.Where(item => item.EndBalance >= mount);
-            foreach (var item in query)
+            var query = Operations.Where(item => item.Amount >= mount);
+            foreach (var x in query)
             {
-                Console.WriteLine("The transactions is grester than {0}, are :{1}", mount, item);
+                Console.WriteLine("The transactions is greater than {0}, is the following deposit :{1}", mount, x.Amount);
             }
         }
         public void ShowOperation()
         {
             Operations.ForEach(x => x.Show());
         }
-        public double Withdraw(double amount) => accountBalance -=amount;
-        
+        public void Withdraw(double amount)
+        {
+            if (amount > accountBalance)
+            {
+                throw new NotEnoughMoneyException();
+            }
+           accountBalance -= amount;
+           Operations.Add(new Operation() { InitialBalance = accountBalance, EndBalance = accountBalance, Amount = amount, TransactionType = OperationType.WithDraw});
+
+        }   
     }
 }

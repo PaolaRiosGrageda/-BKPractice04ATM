@@ -3,7 +3,7 @@
     public interface IAccount
     {
         void Deposit (int money);
-        double Withdraw(double money);
+        void Withdraw(double money);
         void ShowOperation();
         void ShowOperation(double mount);
         void ShowBalance ();
